@@ -1,14 +1,13 @@
 package com.selenium.demo.test.testCases;
 
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.selenium.demo.page.*;
 import com.selenium.demo.test.base.TestBase;
+import com.selenium.demo.util.CSVDataProvider;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -82,8 +81,8 @@ public class NewInsuranceTest extends TestBase {
 
         Thread.sleep(2000);
         homePage.clickOnImportBtn();
-        importPage.selectCSVFile("C:\\Users\\Poorn\\OneDrive\\Desktop\\SimpleSurance\\selenium-testng-page-factory-csv-data-driven\\src\\test\\resources\\testdata.csv");
-//        Thread.sleep(1000);
+        String csvFilePath = System.getProperty("user.dir") + "/src/test/resources/testdata.csv";
+        importPage.selectCSVFile(csvFilePath);
         importPage.clickCreateInsuranceButton();
         Thread.sleep(2000);
         importPage.isImportErrorDisplayed();
@@ -113,23 +112,7 @@ public class NewInsuranceTest extends TestBase {
 
     @DataProvider(name = "loginData")
     public Object[][] getLoginData() throws IOException, CsvValidationException {
-        String csvFilePath = "./src/test/resources/users.csv";
-        CSVReader csvReader = new CSVReader(new FileReader(csvFilePath));
-        String[] csvCell;
-        int rowCount = 0;
-        while ((csvCell = csvReader.readNext()) != null) {
-            rowCount++;
-        }
-        csvReader.close();
-
-        Object[][] data = new Object[rowCount][2];
-        csvReader = new CSVReader(new FileReader(csvFilePath));
-        for (int i = 0; i < rowCount; i++) {
-            csvCell = csvReader.readNext();
-            data[i][0] = csvCell[0]; // Email
-            data[i][1] = csvCell[1]; // Password
-        }
-        return data;
+        return CSVDataProvider.getCSVData("./src/test/resources/users.csv");
     }
 
 }

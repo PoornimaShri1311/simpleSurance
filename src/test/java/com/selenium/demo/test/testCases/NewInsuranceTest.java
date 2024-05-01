@@ -71,8 +71,10 @@ public class NewInsuranceTest extends TestBase {
         Thread.sleep(2000);
 
         paymentPage.switchToPaymentFrame();
+        Thread.sleep(2000);
         paymentPage.enterCardDetails("4242424242424242", "1240", "123");
         paymentPage.switchToDefaultContent();
+        Thread.sleep(2000);
         paymentPage.setConfirmOrder();
         paymentPage.isOrderCreationDisplayed();
         logger.info("createNewInsurance test completed successfully.");

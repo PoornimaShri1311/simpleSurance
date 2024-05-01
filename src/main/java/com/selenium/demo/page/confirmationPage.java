@@ -35,11 +35,18 @@ public class confirmationPage extends BasePage {
     }
 
     public void clickAllMessages() {
+        waitForElementToBeVisible(correctInformationMessage);
+        waitForElementToBeVisible(personalDataMessage);
+        waitForElementToBeVisible(customerInformedMessage);
+        waitForElementToBeVisible(productAgeMessage);
+        waitForElementToBeVisible(createInsurance);
         click(correctInformationMessage);
         click(personalDataMessage);
         click(customerInformedMessage);
         click(productAgeMessage);
         click(createInsurance);
+
+        waitForElementToBeVisible(paymentProceed);
         click(paymentProceed);
     }
 

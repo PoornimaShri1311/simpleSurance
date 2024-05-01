@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class paymentsPage extends BasePage {
-    @FindBy(xpath = "//iframe[@title='Sicherer Eingaberahmen für Kartenzahlungen']")
+    @FindBy(xpath = "//iframe[contains(@title, 'Sicherer Eingaberahmen')]")
     private WebElement paymentFrame;
 
     @FindBy(name = "cardnumber")

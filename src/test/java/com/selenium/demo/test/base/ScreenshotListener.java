@@ -11,7 +11,10 @@ public class ScreenshotListener implements ITestListener {
     private TestBase testBase;
 
     public ScreenshotListener() {
-        // Default constructor
+    }
+
+    public ScreenshotListener(TestBase testBase) {
+        this.testBase = testBase;
     }
 
     public void setTestBase(TestBase testBase) {
@@ -33,7 +36,11 @@ public class ScreenshotListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         System.out.println("Test Failed: " + result.getName());
-        testBase.captureScreenshot(result.getMethod().getMethodName());
+        if (testBase != null) {
+            testBase.captureScreenshot(result.getMethod().getMethodName());
+        } else {
+            System.out.println("TestBase is null. Cannot capture screenshot.");
+        }
     }
 
     @Override

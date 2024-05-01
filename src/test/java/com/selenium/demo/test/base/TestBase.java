@@ -25,14 +25,14 @@ public class TestBase {
     private ExtentTest test;
 
     @BeforeSuite
-    public void setUp() {
+    public void setUpExtentReport() {
         ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter("test-output/extent.html");
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
     }
 
     @BeforeMethod
-    public void initializeDriver() {
+    public void setUpDriver() {
         driver = DriverFactory.getDriver();
         driver.manage().window().maximize();
         driver.get("https://insurance-manager.sb-qa-candidatetask.sisu.sh/login");
@@ -41,23 +41,28 @@ public class TestBase {
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE) {
-            test.log(Status.FAIL, "Test case failed: " + result.getName());
-            test.log(Status.FAIL, "Test case failed reason: " + result.getThrowable());
-            captureScreenshot(result.getMethod().getMethodName());
-        } else if (result.getStatus() == ITestResult.SUCCESS) {
-            test.log(Status.PASS, "Test case passed: " + result.getName());
-            captureScreenshot(result.getMethod().getMethodName());
-        } else if (result.getStatus() == ITestResult.SKIP) {
-            test.log(Status.SKIP, "Test case skipped: " + result.getName());
-        }
-        if (driver != null) {
-            driver.quit();
+        try {
+            if (result.getStatus() == ITestResult.FAILURE) {
+                test.log(Status.FAIL, "Test case failed: " + result.getName());
+                test.log(Status.FAIL, "Test case failed reason: " + result.getThrowable());
+                captureScreenshot(result.getMethod().getMethodName());
+            } else if (result.getStatus() == ITestResult.SUCCESS) {
+                test.log(Status.PASS, "Test case passed: " + result.getName());
+                captureScreenshot(result.getMethod().getMethodName());
+            } else if (result.getStatus() == ITestResult.SKIP) {
+                test.log(Status.SKIP, "Test case skipped: " + result.getName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (driver != null) {
+                driver.quit();
+            }
         }
     }
 
     @AfterSuite
-    public void tearDown() {
+    public void tearDownExtentReport() {
         extent.flush();
     }
 
@@ -84,8 +89,13 @@ public class TestBase {
         BasePage basePage = new BasePage(driver);
         HomePage homePage = new HomePage(driver);
 
-        Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
-        loginPage.login(email, password);
-        Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
+        try {
+            Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
+            loginPage.login(email, password);
+            Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Login failed: " + e.getMessage());
+            throw e; // Rethrow the assertion error to mark the test as failed
+        }
     }
 }

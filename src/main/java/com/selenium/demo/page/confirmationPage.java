@@ -22,7 +22,7 @@ public class confirmationPage extends BasePage {
     @FindBy(xpath = "//span[normalize-space()='Versicherung erstellen']")
     private WebElement createInsurance;
 
-    @FindBy(xpath = "//button[@type='button']")
+    @FindBy(xpath = "//span[normalize-space()='Weiter zur Bezahlung']")
     private WebElement paymentProceed;
 
     @FindBy(xpath = "//span[normalize-space()='Kostenpflichtig bestellen']")

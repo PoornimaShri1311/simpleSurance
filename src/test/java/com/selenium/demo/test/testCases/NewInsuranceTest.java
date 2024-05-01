@@ -4,6 +4,8 @@ import com.opencsv.exceptions.CsvValidationException;
 import com.selenium.demo.page.*;
 import com.selenium.demo.test.base.TestBase;
 import com.selenium.demo.util.CSVDataProvider;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -40,7 +42,7 @@ public class NewInsuranceTest extends TestBase {
         ProductDetailPage productDetailPage = new ProductDetailPage(driver);
         UserDetailPage userDetailPage = new UserDetailPage(driver);
         confirmationPage confirmationPage = new confirmationPage(driver);
-        //Thread.sleep(3000);
+        paymentsPage paymentPage = new paymentsPage(driver);
         homePage.clickOnNewBtn();
         Thread.sleep(2000);
         productDetailPage.selectFromCustomDropdownCountry(5);
@@ -56,18 +58,23 @@ public class NewInsuranceTest extends TestBase {
         productDetailPage.setInvoiceEntry(Integer.toString(randomSerialNumber));
         productDetailPage.setFurtherClick();
 
-        userDetailPage.setFirstName("User First");
-        userDetailPage.setLastName("User Last");
-        userDetailPage.setEmail("email@abc.com");
+        userDetailPage.setFirstName("User First" + randomSerialNumber);
+        userDetailPage.setLastName("User Last" + randomSerialNumber);
+        userDetailPage.setEmail("email" + randomSerialNumber + "@abc.com");
         userDetailPage.setStreetName("Flankens");
         userDetailPage.setStreetNumber("345");
         userDetailPage.setZipcode("13434");
         userDetailPage.setCity("Berlin");
         userDetailPage.setCountry("DE");
         productDetailPage.setFurtherClick();
-        //Thread.sleep(2000);
         confirmationPage.clickAllMessages();
-        //Thread.sleep(3000);
+        Thread.sleep(2000);
+
+        paymentPage.switchToPaymentFrame();
+        paymentPage.enterCardDetails("4242424242424242", "1240", "123");
+        paymentPage.switchToDefaultContent();
+        paymentPage.setConfirmOrder();
+        paymentPage.isOrderCreationDisplayed();
         logger.info("createNewInsurance test completed successfully.");
     }
 

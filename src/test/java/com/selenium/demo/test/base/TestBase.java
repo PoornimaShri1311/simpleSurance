@@ -61,7 +61,7 @@ public class TestBase {
         extent.flush();
     }
 
-    void captureScreenshot(String testName) {
+    public void captureScreenshot(String testName) {
         try {
             if (driver instanceof TakesScreenshot) {
                 File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -77,5 +77,15 @@ public class TestBase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected void verifyValidUserLogin(String email, String password) {
+        LoginPage loginPage = new LoginPage(driver);
+        BasePage basePage = new BasePage(driver);
+        HomePage homePage = new HomePage(driver);
+
+        Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
+        loginPage.login(email, password);
+        Assert.assertEquals(basePage.getBrowserTabTitle(), "Insurance Manager");
     }
 }
